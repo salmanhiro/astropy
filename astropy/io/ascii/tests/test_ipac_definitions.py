@@ -1,6 +1,5 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 
-import re
 from io import StringIO
 
 import pytest
@@ -97,8 +96,10 @@ def test_reserved_colname_strict(colname):
 
 
 def test_too_long_comment():
-    msg = "Wrapping comment lines > 78 characters produced 1 extra line(s)"
-    with pytest.warns(UserWarning, match=re.escape(msg)):
+    with pytest.warns(
+        UserWarning,
+        match=r"Comment string > 78 characters was automatically wrapped\.",
+    ):
         table = Table([[3]])
         table.meta["comments"] = ["a" * 79]
         out = StringIO()

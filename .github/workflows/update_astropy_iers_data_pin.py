@@ -7,9 +7,8 @@ metadata = requests.get(
 ).json()
 
 last_version = metadata["info"]["version"]
-project_file = "pyproject.toml"
 
-with open(project_file) as f:
+with open("setup.cfg") as f:
     lines = f.readlines()
 
 changed_lines = 0
@@ -17,15 +16,15 @@ changed_lines = 0
 for iline in range(len(lines)):
     if "astropy-iers-data" in lines[iline]:
         changed_lines += 1
-        lines[iline] = f'    "astropy-iers-data>={last_version}",\n'
+        lines[iline] = f"    astropy-iers-data>={last_version}\n"
 
 if changed_lines == 0:
-    print(f"No line found containing astropy-iers-data in {project_file}")
+    print("No line found containing astropy-iers-data in setup.cfg")
     sys.exit(1)
 elif changed_lines > 1:
-    print(f"More than one line found containing astropy-iers-data in {project_file}")
+    print("More than one line found containing astropy-iers-data in setup.cfg")
     sys.exit(1)
 
 
-with open(project_file, "w") as f:
+with open("setup.cfg", "w") as f:
     f.writelines(lines)

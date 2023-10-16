@@ -16,7 +16,8 @@ __doctest_requires__ = {"*": ["scipy"]}
 
 
 class wCDM(FLRW):
-    """FLRW cosmology with a constant dark energy EoS and curvature.
+    """
+    FLRW cosmology with a constant dark energy equation of state and curvature.
 
     This has one additional attribute beyond those of FLRW.
 
@@ -77,9 +78,7 @@ class wCDM(FLRW):
     >>> dc = cosmo.comoving_distance(z)
     """
 
-    w0 = Parameter(
-        default=-1.0, doc="Dark energy equation of state.", fvalidate="float"
-    )
+    w0 = Parameter(doc="Dark energy equation of state.", fvalidate="float")
 
     def __init__(
         self,
@@ -93,7 +92,7 @@ class wCDM(FLRW):
         Ob0=None,
         *,
         name=None,
-        meta=None,
+        meta=None
     ):
         super().__init__(
             H0=H0,
@@ -237,7 +236,9 @@ class wCDM(FLRW):
 
 
 class FlatwCDM(FlatFLRWMixin, wCDM):
-    """FLRW cosmology with a constant dark energy EoS and no spatial curvature.
+    """
+    FLRW cosmology with a constant dark energy equation of state and no spatial
+    curvature.
 
     This has one additional attribute beyond those of FLRW.
 
@@ -311,7 +312,7 @@ class FlatwCDM(FlatFLRWMixin, wCDM):
         Ob0=None,
         *,
         name=None,
-        meta=None,
+        meta=None
     ):
         super().__init__(
             H0=H0,

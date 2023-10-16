@@ -19,7 +19,6 @@ import builtins
 
 import numpy as np
 
-from astropy.utils.compat import NUMPY_LT_2_0
 from astropy.utils.data_info import ParentDtypeInfo
 from astropy.utils.shapes import NDArrayShapeMethods
 
@@ -697,9 +696,7 @@ class MaskedNDArray(Masked, np.ndarray, base_cls=np.ndarray, data_cls=np.ndarray
                 np.copyto(out, masks[0], where=where)
                 return out
 
-        # [...] at the end to ensure we have an array, not a scalar, and
-        # thus can be used for in-place changes in the loop.
-        out = np.logical_or(masks[0], masks[1], out=out, where=where)[...]
+        out = np.logical_or(masks[0], masks[1], out=out, where=where)
         for mask in masks[2:]:
             np.logical_or(out, mask, out=out, where=where)
         return out
@@ -762,17 +759,9 @@ class MaskedNDArray(Masked, np.ndarray, base_cls=np.ndarray, data_cls=np.ndarray
             else:
                 # Parse signature with private numpy function. Note it
                 # cannot handle spaces in tuples, so remove those.
-                if NUMPY_LT_2_0:
-                    in_sig, out_sig = np.lib.function_base._parse_gufunc_signature(
-                        ufunc.signature.replace(" ", "")
-                    )
-                else:
-                    (
-                        in_sig,
-                        out_sig,
-                    ) = np.lib._function_base_impl._parse_gufunc_signature(
-                        ufunc.signature.replace(" ", "")
-                    )
+                in_sig, out_sig = np.lib.function_base._parse_gufunc_signature(
+                    ufunc.signature.replace(" ", "")
+                )
                 axis = kwargs.get("axis", -1)
                 keepdims = kwargs.get("keepdims", False)
                 in_masks = []
@@ -928,8 +917,8 @@ class MaskedNDArray(Masked, np.ndarray, base_cls=np.ndarray, data_cls=np.ndarray
         # it quite likely coerces, so we should just break.
         if any(issubclass(t, np.ndarray) and not issubclass(t, Masked) for t in types):
             raise TypeError(
-                f"the MaskedNDArray implementation cannot handle {function} "
-                "with the given arguments."
+                "the MaskedNDArray implementation cannot handle {} "
+                "with the given arguments.".format(function)
             ) from None
         else:
             return NotImplemented
@@ -991,11 +980,6 @@ class MaskedNDArray(Masked, np.ndarray, base_cls=np.ndarray, data_cls=np.ndarray
         return super().max(
             axis=axis, out=out, **self._reduce_defaults(kwargs, np.nanmin)
         )
-
-    def ptp(self, axis=None, out=None, **kwargs):
-        result = self.max(axis=axis, out=out, **kwargs)
-        result -= self.min(axis=axis, **kwargs)
-        return result
 
     def nonzero(self):
         unmasked_nonzero = self.unmasked.nonzero()

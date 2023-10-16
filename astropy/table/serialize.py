@@ -29,6 +29,9 @@ __construct_mixin_classes = (
     "astropy.units.function.logarithmic.Magnitude",
     "astropy.units.function.logarithmic.Decibel",
     "astropy.units.function.logarithmic.Dex",
+    "astropy.coordinates.angles.Latitude",
+    "astropy.coordinates.angles.Longitude",
+    "astropy.coordinates.angles.Angle",
     "astropy.coordinates.distances.Distance",
     "astropy.coordinates.earth.EarthLocation",
     "astropy.coordinates.sky_coordinate.SkyCoord",
@@ -38,10 +41,6 @@ __construct_mixin_classes = (
     "astropy.table.column.Column",
     "astropy.table.column.MaskedColumn",
     "astropy.utils.masked.core.MaskedNDArray",
-    # Angles
-    "astropy.coordinates.angles.core.Latitude",
-    "astropy.coordinates.angles.core.Longitude",
-    "astropy.coordinates.angles.core.Angle",
     # Representations
     "astropy.coordinates.representation.cartesian.CartesianRepresentation",
     "astropy.coordinates.representation.spherical.UnitSphericalRepresentation",
@@ -72,9 +71,6 @@ __construct_mixin_classes = (
     "astropy.coordinates.representation.RadialDifferential",
     "astropy.coordinates.representation.PhysicsSphericalDifferential",
     "astropy.coordinates.representation.CylindricalDifferential",
-    "astropy.coordinates.angles.Latitude",
-    "astropy.coordinates.angles.Longitude",
-    "astropy.coordinates.angles.Angle",
 )
 
 

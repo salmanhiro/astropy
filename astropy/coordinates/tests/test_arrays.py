@@ -18,6 +18,7 @@ from astropy.coordinates import (
 from astropy.tests.helper import assert_quantity_allclose as assert_allclose
 from astropy.time import Time
 from astropy.utils.compat import NUMPY_LT_1_24
+from astropy.utils.exceptions import AstropyDeprecationWarning
 
 
 def test_angle_arrays():
@@ -55,7 +56,7 @@ def test_angle_arrays():
         else:
             stack.enter_context(pytest.raises(ValueError))
 
-        Angle([a1, a2, a3], unit=u.degree)
+        a7 = Angle([a1, a2, a3], unit=u.degree)
 
     a8 = Angle(["04:02:02", "03:02:01", "06:02:01"], unit=u.degree)
     npt.assert_almost_equal(a8.value, [4.03388889, 3.03361111, 6.03361111])
@@ -64,7 +65,7 @@ def test_angle_arrays():
     npt.assert_almost_equal(a9.value, a8.value)
 
     with pytest.raises(u.UnitsError):
-        Angle(["04:02:02", "03:02:01", "06:02:01"])
+        a10 = Angle(["04:02:02", "03:02:01", "06:02:01"])
 
 
 def test_dms():
@@ -86,6 +87,11 @@ def test_hms():
     hours = hms[0] + hms[1] / 60.0 + hms[2] / 3600.0
     npt.assert_almost_equal(a1.hour, hours)
 
+    with pytest.warns(AstropyDeprecationWarning, match="hms_to_hours"):
+        a2 = Angle(hms, unit=u.hour)
+
+    npt.assert_almost_equal(a2.radian, a1.radian)
+
 
 def test_array_coordinates_creation():
     """
@@ -95,9 +101,9 @@ def test_array_coordinates_creation():
     assert not c.ra.isscalar
 
     with pytest.raises(ValueError):
-        ICRS(np.array([1, 2]) * u.deg, np.array([3, 4, 5]) * u.deg)
+        c = ICRS(np.array([1, 2]) * u.deg, np.array([3, 4, 5]) * u.deg)
     with pytest.raises(ValueError):
-        ICRS(np.array([1, 2, 4, 5]) * u.deg, np.array([[3, 4], [5, 6]]) * u.deg)
+        c = ICRS(np.array([1, 2, 4, 5]) * u.deg, np.array([[3, 4], [5, 6]]) * u.deg)
 
     # make sure cartesian initialization also works
     cart = CartesianRepresentation(
@@ -110,9 +116,9 @@ def test_array_coordinates_creation():
 
     # but invalid strings cannot
     with pytest.raises(ValueError):
-        SkyCoord(Angle(["10m0s", "2h02m00.3s"]), Angle(["3d", "4d"]))
+        c = SkyCoord(Angle(["10m0s", "2h02m00.3s"]), Angle(["3d", "4d"]))
     with pytest.raises(ValueError):
-        SkyCoord(Angle(["1d0m0s", "2h02m00.3s"]), Angle(["3x", "4d"]))
+        c = SkyCoord(Angle(["1d0m0s", "2h02m00.3s"]), Angle(["3x", "4d"]))
 
 
 def test_array_coordinates_distances():

@@ -1,4 +1,4 @@
-<!-- These comments are hidden when you submit the pull request,
+<!-- This comments are hidden when you submit the pull request,
 so you do not need to remove them! -->
 
 <!-- Please be sure to check out our contributing guidelines,

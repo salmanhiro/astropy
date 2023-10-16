@@ -1,7 +1,5 @@
-from __future__ import annotations
-
 from contextlib import contextmanager
-from typing import NamedTuple
+from typing import Dict, NamedTuple
 
 import numpy as np
 
@@ -41,7 +39,7 @@ UNKNOWN_STOKES_VALUE = -99999
 
 @contextmanager
 def custom_stokes_symbol_mapping(
-    mapping: dict[int, StokesSymbol], replace: bool = False
+    mapping: Dict[int, StokesSymbol], replace: bool = False
 ) -> None:
     """
     Add a custom set of mappings from values to Stokes symbols.

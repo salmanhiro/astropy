@@ -483,5 +483,5 @@ class BST:
         row_map : dict
             Mapping of row numbers to new row numbers
         """
-        for _, data in self.items():  # noqa: PERF102
+        for key, data in self.items():
             data[:] = [row_map[x] for x in data if x in row_map]

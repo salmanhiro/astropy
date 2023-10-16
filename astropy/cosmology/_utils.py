@@ -35,10 +35,9 @@ def vectorize_redshift_method(func=None, nin=1):
 
     @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
-        """Wrapper converting arguments to numpy-compatible inputs.
-
-        :func:`functools.wraps` of ``func`` where the first ``nin`` arguments are
-        converted from |Quantity| to `numpy.ndarray` or scalar.
+        """
+        :func:`functools.wraps` of ``func`` where the first ``nin``
+        arguments are converted from |Quantity| to `numpy.ndarray` or scalar.
         """
         # process inputs
         # TODO! quantity-aware vectorization can simplify this.
@@ -59,8 +58,8 @@ def vectorize_redshift_method(func=None, nin=1):
 
 
 def aszarr(z):
-    """Redshift as a `~numbers.Number` or |ndarray| / |Quantity| / |Column|.
-
+    """
+    Redshift as a `~numbers.Number` or `~numpy.ndarray` / |Quantity| / |Column|.
     Allows for any ndarray ducktype by checking for attribute "shape".
     """
     if isinstance(z, (Number, np.generic)):  # scalars

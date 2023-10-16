@@ -79,7 +79,7 @@ class Group(FITS_record):
                 else:
                     raise ValueError(
                         "Parameter value must be a sequence with "
-                        f"{len(indx)} arrays/numbers."
+                        "{} arrays/numbers.".format(len(indx))
                     )
 
 

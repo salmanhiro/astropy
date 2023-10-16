@@ -1166,7 +1166,8 @@ class SkyCoord(ShapedLikeNDArray):
         .. [1] https://en.wikipedia.org/wiki/Great-circle_distance
 
         """
-        from .angles import Angle, angular_separation
+        from . import Angle
+        from .angle_utilities import angular_separation
 
         if not self.is_equivalent_frame(other):
             try:
@@ -1370,12 +1371,12 @@ class SkyCoord(ShapedLikeNDArray):
         separation : inverse operation for the ``separation`` component
 
         """
-        from .angles import offset_by
+        from . import angle_utilities
 
         slat = self.represent_as(UnitSphericalRepresentation).lat
         slon = self.represent_as(UnitSphericalRepresentation).lon
 
-        newlon, newlat = offset_by(
+        newlon, newlat = angle_utilities.offset_by(
             lon=slon, lat=slat, posang=position_angle, distance=separation
         )
 
@@ -1663,7 +1664,7 @@ class SkyCoord(ShapedLikeNDArray):
         >>> c1.position_angle(c3).degree  # doctest: +FLOAT_CMP
         44.995636455344844
         """
-        from .angles import position_angle
+        from . import angle_utilities
 
         if not self.is_equivalent_frame(other):
             try:
@@ -1679,7 +1680,7 @@ class SkyCoord(ShapedLikeNDArray):
         olat = other.represent_as(UnitSphericalRepresentation).lat
         olon = other.represent_as(UnitSphericalRepresentation).lon
 
-        return position_angle(slon, slat, olon, olat)
+        return angle_utilities.position_angle(slon, slat, olon, olat)
 
     def skyoffset_frame(self, rotation=None):
         """
@@ -2069,7 +2070,7 @@ class SkyCoord(ShapedLikeNDArray):
         in an astropy Table.
 
         This method matches table columns that start with the case-insensitive
-        names of the components of the requested frames (including
+        names of the the components of the requested frames (including
         differentials), if they are also followed by a non-alphanumeric
         character. It will also match columns that *end* with the component name
         if a non-alphanumeric character is *before* it.
@@ -2079,7 +2080,7 @@ class SkyCoord(ShapedLikeNDArray):
         `~astropy.coordinates.ICRS` frames, but ``'RAJ2000'`` or ``'radius'``
         are *not*. Similarly, the second rule applied to the
         `~astropy.coordinates.Galactic` frame means that a column named
-        ``'gal_l'`` will be used as the ``l`` component, but ``gall`` or
+        ``'gal_l'`` will be used as the the ``l`` component, but ``gall`` or
         ``'fill'`` will not.
 
         The definition of alphanumeric here is based on Unicode's definition

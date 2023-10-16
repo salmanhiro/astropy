@@ -61,9 +61,9 @@ def hist(x, bins=10, ax=None, max_bins=1e5, **kwargs):
     if len(bins) > max_bins:
         raise ValueError(
             "Histogram has too many bins: "
-            f"{len(bins)}. Use max_bins to increase the number "
+            "{nbin}. Use max_bins to increase the number "
             "of allowed bins or range to restrict "
-            "the histogram range."
+            "the histogram range.".format(nbin=len(bins))
         )
 
     if ax is None:

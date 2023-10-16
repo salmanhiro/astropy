@@ -229,7 +229,7 @@ class Index:
             rows.append(row)
         # second pass - row order is reversed to maintain
         # correct row numbers
-        for row in sorted(rows, reverse=True):
+        for row in reversed(sorted(rows)):
             self.data.shift_left(row)
 
     def remove_row(self, row, reorder=True):
@@ -716,7 +716,7 @@ class _IndexModeContext:
             raise ValueError(
                 "Expected a mode of either 'freeze', "
                 "'discard_on_copy', or 'copy_on_getitem', got "
-                f"'{mode}'"
+                "'{}'".format(mode)
             )
 
     def __enter__(self):

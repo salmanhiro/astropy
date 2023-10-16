@@ -6,6 +6,7 @@ of astronomical objects. It also contains a framework for conversions
 between coordinate systems.
 """
 
+from .angle_utilities import *
 from .angles import *
 from .attributes import *
 from .baseframe import *
