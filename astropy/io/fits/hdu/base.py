@@ -27,7 +27,6 @@ from astropy.io.fits.util import (
 )
 from astropy.io.fits.verify import _ErrList, _Verify
 from astropy.utils import lazyproperty
-from astropy.utils.decorators import deprecated
 from astropy.utils.exceptions import AstropyUserWarning
 
 __all__ = [
@@ -110,11 +109,7 @@ def _hdu_class_from_header(cls, header):
                     or c in cls._hdu_registry
                 ):
                     continue
-                # skip _NonstandardExtHDU and _ExtensionHDU since those are deprecated
-                if c.match_header(header) and c not in (
-                    _NonstandardExtHDU,
-                    _ExtensionHDU,
-                ):
+                if c.match_header(header):
                     klass = c
                     break
             except NotImplementedError:
@@ -122,7 +117,7 @@ def _hdu_class_from_header(cls, header):
             except Exception as exc:
                 warnings.warn(
                     "An exception occurred matching an HDU header to the "
-                    f"appropriate HDU type: {exc}",
+                    "appropriate HDU type: {}".format(exc),
                     AstropyUserWarning,
                 )
                 warnings.warn(
@@ -311,7 +306,7 @@ class _BaseHDU:
 
         Parameters
         ----------
-        data : str, bytes, memoryview, ndarray
+        data : str, bytearray, memoryview, ndarray
             A byte string containing the HDU's header and data.
 
         checksum : bool, optional
@@ -1063,8 +1058,8 @@ class _ValidHDU(_BaseHDU, _Verify):
                             raise ValueError
                     except ValueError:
                         err_text = (
-                            f"NAXISj keyword out of range ('{keyword}' when "
-                            f"NAXIS == {naxis})"
+                            "NAXISj keyword out of range ('{}' when "
+                            "NAXIS == {})".format(keyword, naxis)
                         )
 
                         def fix(self=self, keyword=keyword):
@@ -1618,9 +1613,9 @@ class ExtensionHDU(_ValidHDU):
         return errs
 
 
-@deprecated("v6.0")
-class _ExtensionHDU(ExtensionHDU):
-    pass
+# For backwards compatibility, though this needs to be deprecated
+# TODO: Mark this as deprecated
+_ExtensionHDU = ExtensionHDU
 
 
 class NonstandardExtHDU(ExtensionHDU):
@@ -1667,6 +1662,5 @@ class NonstandardExtHDU(ExtensionHDU):
         return self._get_raw_data(self.size, "ubyte", self._data_offset)
 
 
-@deprecated("v6.0")
-class _NonstandardExtHDU(NonstandardExtHDU):
-    pass
+# TODO: Mark this as deprecated
+_NonstandardExtHDU = NonstandardExtHDU

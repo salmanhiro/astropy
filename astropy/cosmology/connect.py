@@ -176,6 +176,7 @@ class CosmologyFromFormat(io_registry.UnifiedReadWrite):
     -------
     out : `~astropy.cosmology.Cosmology` subclass instance
         `~astropy.cosmology.Cosmology` corresponding to ``obj`` contents.
+
     """
 
     def __init__(self, instance, cosmo_cls):
@@ -235,6 +236,7 @@ class CosmologyToFormat(io_registry.UnifiedReadWrite):
         first argument is the output filename.
     **kwargs
         Keyword arguments passed through to data writer.
+
     """
 
     def __init__(self, instance, cls):

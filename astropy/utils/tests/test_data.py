@@ -23,12 +23,13 @@ from contextlib import nullcontext
 from itertools import islice
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 
+import py.path
 import pytest
 
 import astropy.utils.data
 from astropy import units as _u  # u is taken
 from astropy.config import paths
-from astropy.tests.helper import CI, IS_CRON, PYTEST_LT_8_0
+from astropy.tests.helper import PYTEST_LT_8_0
 from astropy.utils.data import (
     CacheDamaged,
     CacheMissingWarning,
@@ -60,6 +61,7 @@ from astropy.utils.data import (
 )
 from astropy.utils.exceptions import AstropyWarning
 
+CI = os.environ.get("CI", "false") == "true"
 TESTURL = "http://www.astropy.org"
 TESTURL2 = "http://www.astropy.org/about.html"
 TESTURL_SSL = "https://www.astropy.org"
@@ -233,7 +235,7 @@ def test_download_file_absolute_path(valid_urls, temp_cache):
     assert is_abs(download_file(u, cache=False))  # no cache
     assert is_abs(download_file(u, cache=True))  # not in cache
     assert is_abs(download_file(u, cache=True))  # in cache
-    for v in cache_contents().values():
+    for k, v in cache_contents().items():
         assert is_abs(v)
 
 
@@ -350,8 +352,10 @@ def test_download_with_sources_and_bogus_original(
     # it was loaded by mistake.
     for i, (um, c_bad) in enumerate(islice(valid_urls, FEW)):
         assert not is_url_in_cache(um)
+        sources[um] = []
         # For many of them the sources list starts with invalid URLs
-        sources[um] = list(islice(invalid_urls, i))
+        for iu in islice(invalid_urls, i):
+            sources[um].append(iu)
         u, c = next(valid_urls)
         sources[um].append(u)
         urls.append((um, c, c_bad))
@@ -734,7 +738,9 @@ def test_download_parallel_with_sources_and_bogus_original(
     sources = {}
     for i, (um, c_bad) in enumerate(islice(valid_urls, FEW)):
         assert not is_url_in_cache(um)
-        sources[um] = list(islice(invalid_urls, i))
+        sources[um] = []
+        for iu in islice(invalid_urls, i):
+            sources[um].append(iu)
         u, c = next(valid_urls)
         sources[um].append(u)
         urls.append((um, c, c_bad))
@@ -903,7 +909,7 @@ def test_find_by_hash(valid_urls, temp_cache):
 def test_find_invalid():
     # this is of course not a real data file and not on any remote server, but
     # it should *try* to go to the remote server
-    with pytest.raises((urllib.error.URLError, TimeoutError)):
+    with pytest.raises(urllib.error.URLError):
         get_pkg_data_filename(
             "kjfrhgjklahgiulrhgiuraehgiurhgiuhreglhurieghruelighiuerahiulruli"
         )
@@ -1601,6 +1607,12 @@ def test_get_fileobj_str(a_file):
         assert rf.read() == c
 
 
+def test_get_fileobj_localpath(a_file):
+    fn, c = a_file
+    with get_readable_fileobj(py.path.local(fn)) as rf:
+        assert rf.read() == c
+
+
 def test_get_fileobj_pathlib(a_file):
     fn, c = a_file
     with get_readable_fileobj(pathlib.Path(fn)) as rf:
@@ -2190,7 +2202,7 @@ def test_clear_download_cache_raises_os_error(temp_cache, valid_urls, monkeypatc
 
 
 @pytest.mark.skipif(
-    CI and not IS_CRON,
+    CI and os.environ.get("IS_CRON", "false") == "false",
     reason="Flaky/too much external traffic for regular CI",
 )
 @pytest.mark.remote_data

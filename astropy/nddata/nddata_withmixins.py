@@ -68,3 +68,5 @@ class NDDataRef(NDArithmeticMixin, NDIOMixin, NDSlicingMixin, NDData):
     See `NDSlicingMixin` for a description how slicing works (which attributes)
     are sliced.
     """
+
+    pass

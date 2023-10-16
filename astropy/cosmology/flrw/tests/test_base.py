@@ -17,10 +17,10 @@ import astropy.constants as const
 
 # LOCAL
 import astropy.units as u
-from astropy.cosmology import FLRW, FlatLambdaCDM, LambdaCDM, Parameter, Planck18
+from astropy.cosmology import FLRW, FlatLambdaCDM, LambdaCDM, Planck18
 from astropy.cosmology.core import _COSMOLOGY_CLASSES
 from astropy.cosmology.flrw.base import _a_B_c2, _critdens_const, _H0units_to_invs, quad
-from astropy.cosmology.parameter._core import MISSING
+from astropy.cosmology.parameter import Parameter
 from astropy.cosmology.tests.helper import get_redshift_methods
 from astropy.cosmology.tests.test_core import (
     CosmologyTest,
@@ -71,7 +71,6 @@ class ParameterH0TestMixin(ParameterTestMixin):
         assert isinstance(cosmo_cls.H0, Parameter)
         assert "Hubble constant" in cosmo_cls.H0.__doc__
         assert cosmo_cls.H0.unit == unit
-        assert cosmo_cls.H0.default is MISSING
 
         # validation
         assert cosmo_cls.H0.validate(cosmo, 1) == 1 * unit
@@ -114,7 +113,6 @@ class ParameterOm0TestMixin(ParameterTestMixin):
         # on the class
         assert isinstance(cosmo_cls.Om0, Parameter)
         assert "Omega matter" in cosmo_cls.Om0.__doc__
-        assert cosmo_cls.Om0.default is MISSING
 
         # validation
         assert cosmo_cls.Om0.validate(cosmo, 1) == 1
@@ -157,7 +155,6 @@ class ParameterOde0TestMixin(ParameterTestMixin):
         """Test Parameter ``Ode0`` on the class."""
         assert isinstance(cosmo_cls.Ode0, Parameter)
         assert "Omega dark energy" in cosmo_cls.Ode0.__doc__
-        assert cosmo_cls.Ode0.default is MISSING
 
     def test_Parameter_Ode0_validation(self, cosmo_cls, cosmo):
         """Test Parameter ``Ode0`` validation."""
@@ -211,7 +208,6 @@ class ParameterTcmb0TestMixin(ParameterTestMixin):
         assert isinstance(cosmo_cls.Tcmb0, Parameter)
         assert "Temperature of the CMB" in cosmo_cls.Tcmb0.__doc__
         assert cosmo_cls.Tcmb0.unit == u.K
-        assert cosmo_cls.Tcmb0.default == 0.0 * u.K
 
         # validation
         assert cosmo_cls.Tcmb0.validate(cosmo, 1) == 1 * u.K
@@ -254,7 +250,6 @@ class ParameterNeffTestMixin(ParameterTestMixin):
         # on the class
         assert isinstance(cosmo_cls.Neff, Parameter)
         assert "Number of effective neutrino species" in cosmo_cls.Neff.__doc__
-        assert cosmo_cls.Neff.default == 3.04
 
         # validation
         assert cosmo_cls.Neff.validate(cosmo, 1) == 1
@@ -299,7 +294,6 @@ class Parameterm_nuTestMixin(ParameterTestMixin):
         assert "Mass of neutrino species" in cosmo_cls.m_nu.__doc__
         assert cosmo_cls.m_nu.unit == u.eV
         assert cosmo_cls.m_nu.equivalencies == u.mass_energy()
-        assert cosmo_cls.m_nu.default == 0.0 * u.eV
 
         # on the instance
         # assert cosmo.m_nu is cosmo._m_nu
@@ -406,7 +400,6 @@ class ParameterOb0TestMixin(ParameterTestMixin):
         # on the class
         assert isinstance(cosmo_cls.Ob0, Parameter)
         assert "Omega baryon;" in cosmo_cls.Ob0.__doc__
-        assert cosmo_cls.Ob0.default is None
 
         # validation
         assert cosmo_cls.Ob0.validate(cosmo, None) is None
@@ -1080,7 +1073,7 @@ class FlatFLRWMixinTest(FlatCosmologyMixinTest, ParameterFlatOde0TestMixin):
         flat = nonflat_cosmo_cls(
             *self.cls_args,
             Ode0=1.0 - cosmo.Om0 - cosmo.Ogamma0 - cosmo.Onu0,
-            **self.cls_kwargs,
+            **self.cls_kwargs
         )
         flat._Ok0 = 0.0
         assert flat.is_equivalent(cosmo)

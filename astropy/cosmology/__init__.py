@@ -1,10 +1,10 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
-"""Cosmology with Astropy.
+"""``astropy.cosmology`` contains classes and functions for cosmological
+distance measures and other cosmology-related calculations.
 
-:mod:`~astropy.cosmology` contains classes and functions for cosmological distance
-measures and other cosmology-related calculations.
+See the :ref:`astropy-cosmology` for more
+detailed usage examples and references.
 
-See the :ref:`astropy-cosmology` for more detailed usage examples and references.
 """
 
 from . import realizations, units
@@ -68,7 +68,8 @@ __all__ = [
 
 
 def __getattr__(name):
-    """Get realizations using lazy import from ``PEP 562``.
+    """Get realizations using lazy import from
+    `PEP 562 <https://www.python.org/dev/peps/pep-0562/>`_.
 
     Raises
     ------

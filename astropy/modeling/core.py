@@ -1061,12 +1061,11 @@ class Model(metaclass=_ModelMeta):
                 )
             )
 
-        try:
-            input_shape = check_broadcast(*all_shapes)
-        except IncompatibleShapeError as e:
+        input_shape = check_broadcast(*all_shapes)
+        if input_shape is None:
             raise ValueError(
                 "All inputs must have identical shapes or must be scalars."
-            ) from e
+            )
 
         return input_shape
 
@@ -1797,7 +1796,7 @@ class Model(metaclass=_ModelMeta):
         Raises
         ------
         ValueError
-            If ``coords`` are not given and the `Model.bounding_box` of
+            If ``coords`` are not given and the the `Model.bounding_box` of
             this model is not set.
 
         Examples
@@ -3904,7 +3903,7 @@ class CompoundModel(Model):
         Raises
         ------
         ValueError
-            If ``coords`` are not given and the `Model.bounding_box` of
+            If ``coords`` are not given and the the `Model.bounding_box` of
             this model is not set.
 
         Examples

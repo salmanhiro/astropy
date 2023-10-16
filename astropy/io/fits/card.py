@@ -178,7 +178,7 @@ class Card(_Verify):
         # card
         self._hierarch = False
 
-        # If the card could not be parsed according the FITS standard or
+        # If the card could not be parsed according the the FITS standard or
         # any recognized non-standard conventions, this will be True
         self._invalid = False
 
@@ -269,9 +269,9 @@ class Card(_Verify):
                     # We'll gladly create a HIERARCH card, but a warning is
                     # also displayed
                     warnings.warn(
-                        f"Keyword name {keyword!r} is greater than 8 characters or "
+                        "Keyword name {!r} is greater than 8 characters or "
                         "contains characters not allowed by the FITS "
-                        "standard; a HIERARCH card will be created.",
+                        "standard; a HIERARCH card will be created.".format(keyword),
                         VerifyWarning,
                     )
             else:
@@ -354,8 +354,8 @@ class Card(_Verify):
             if not m:
                 raise ValueError(
                     "FITS header values must contain standard printable ASCII "
-                    f"characters; {value!r} contains characters not representable in "
-                    "ASCII or non-printable characters."
+                    "characters; {!r} contains characters not representable in "
+                    "ASCII or non-printable characters.".format(value)
                 )
         elif isinstance(value, np.bool_):
             value = bool(value)
@@ -742,7 +742,7 @@ class Card(_Verify):
             else:
                 warnings.warn(
                     "The following header keyword is invalid or follows an "
-                    f"unrecognized non-standard convention:\n{self._image}",
+                    "unrecognized non-standard convention:\n{}".format(self._image),
                     AstropyUserWarning,
                 )
                 self._invalid = True
@@ -1125,8 +1125,8 @@ class Card(_Verify):
             errs.append(
                 {
                     "err_text": (
-                        f"Card {self.keyword!r} is not FITS standard (equal sign not "
-                        "at column 8)."
+                        "Card {!r} is not FITS standard (equal sign not "
+                        "at column 8).".format(self.keyword)
                     ),
                     "fix_text": fix_text,
                     "fix": self._fix_value,

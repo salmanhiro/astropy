@@ -11,7 +11,7 @@ celestial-to-terrestrial coordinate transformations
 
 import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime
 from urllib.parse import urlparse
 from warnings import warn
 
@@ -1091,9 +1091,7 @@ class LeapSeconds(QTable):
     def _today():
         # Get current day in scale='tai' without going through a scale change
         # (so we do not need leap seconds).
-        s = "{0.year:04d}-{0.month:02d}-{0.day:02d}".format(
-            datetime.now(tz=timezone.utc)
-        )
+        s = "{0.year:04d}-{0.month:02d}-{0.day:02d}".format(datetime.utcnow())
         return Time(s, scale="tai", format="iso", out_subfmt="date")
 
     @classmethod

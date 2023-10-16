@@ -169,8 +169,8 @@ class _File:
             objmode = _normalize_fits_mode(fileobj_mode(fileobj))
             if mode is not None and mode != objmode:
                 raise ValueError(
-                    f"Requested FITS mode '{mode}' not compatible with open file "
-                    f"handle mode '{objmode}'"
+                    "Requested FITS mode '{}' not compatible with open file "
+                    "handle mode '{}'".format(mode, objmode)
                 )
             mode = objmode
         if mode is None:
@@ -430,7 +430,7 @@ class _File:
         if self.size and pos > self.size:
             warnings.warn(
                 "File may have been truncated: actual file length "
-                f"({self.size}) is smaller than the expected size ({pos})",
+                "({}) is smaller than the expected size ({})".format(self.size, pos),
                 AstropyUserWarning,
             )
 
@@ -599,14 +599,14 @@ class _File:
         ):
             raise OSError(
                 "File-like object does not have a 'write' "
-                f"method, required for mode '{self.mode}'."
+                "method, required for mode '{}'.".format(self.mode)
             )
 
         # Any mode except for 'ostream' requires readability
         if self.mode != "ostream" and not hasattr(self._file, "read"):
             raise OSError(
                 "File-like object does not have a 'read' "
-                f"method, required for mode {self.mode!r}."
+                "method, required for mode {!r}.".format(self.mode)
             )
 
     def _open_filename(self, filename, mode, overwrite):

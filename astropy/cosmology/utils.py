@@ -9,7 +9,8 @@ from astropy.utils.decorators import deprecated
 
 # TODO: complete the deprecation for v6.2 / v7
 def __getattr__(name):
-    """Get realizations using lazy import from ``PEP 562``.
+    """Get realizations using lazy import from
+    `PEP 562 <https://www.python.org/dev/peps/pep-0562/>`_.
 
     Raises
     ------

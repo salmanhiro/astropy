@@ -76,12 +76,10 @@ def convert_to_writable_filelike(fd, compressed=False):
 
         if needs_wrapper:
             yield codecs.getwriter("utf-8")(fd)
+            fd.flush()
         else:
             yield fd
-
-        fd.flush()
-        if isinstance(fd, gzip.GzipFile):
-            fd.close()
+            fd.flush()
 
         return
     else:
